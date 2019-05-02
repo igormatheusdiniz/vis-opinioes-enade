@@ -9,6 +9,8 @@ output:
 library(flexdashboard)
 library(tidyverse)
 library(viridis)
+library(htmlwidgets)
+library(plotly)
 theme_set(theme_bw())
 
 respostas = read_csv(here::here("data/enade-ccc-2017.csv"),
@@ -28,23 +30,34 @@ criterios = respostas %>%
 ### Levando em consideração as notas atribuidas na categoria de Curso em geral, quais foram as universidades que obtiveram as melhores colocações?
 ```{r}
 
-teste = enade_ccc_2017 %>% 
+topCursos = respostas %>% 
     group_by(IES,UF) %>% 
     filter(categoria == "Curso em geral") %>% 
     summarise(n= mean(n), media= mean(media)) %>% 
     arrange(desc(media))
 
-teste %>% 
-    head(teste, n=15L) %>% 
-    ggplot(aes(x= reorder(IES,media), y=media, color=UF))+
+topCursos %>% 
+    head(teste, n=25L) %>% 
+    ggplot(aes(x= reorder(IES,media), y=media, color=UF, size= n))+
     geom_point()+
-    coord_flip()
+    coord_flip()+
+    labs(
+        x = "IES",
+        y = "Avaliação numa escala de 1 a 6",
+        title = "Medias das avaliações para  Curso em geral por IES",
+        caption = "Apenas cursos de CC com pelo menos 50 respostas"
+    )
 
-media_medias =  enade_ccc_2017 %>% 
+    
+```
+
+
+```{r}
+media_medias =  respostas %>% 
     group_by(IES) %>% 
     summarise(media=mean(media))
 
-enade_ccc_2017 %>% 
+respostas %>% 
     group_by(IES,UF) %>% 
     filter(categoria == "Curso em geral") %>% 
     ggplot(aes(x= reorder(IES,media), y=media, color=UF))+
@@ -55,8 +68,23 @@ enade_ccc_2017 %>%
 
     coord_flip()
 
-    
 ```
+
+```{r}
+iteractive = topCursos%>% 
+    ggplot(aes(x = UF, 
+               y = media,
+               color = n,
+               label = IES)) + 
+    geom_point(size = 2, alpha = .5)  + 
+    coord_flip() + 
+    theme(legend.position = "None")
+iteractive
+ggplotly(iteractive)
+
+
+```
+
 
 
 ```{r}

@@ -1,0 +1,105 @@
+---
+title: "Uma história em slides"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+theme_set(theme_bw())
+
+respostas = read_csv(here::here("data/enade-ccc-2017.csv"),
+                     col_types = "cccdccdddc")
+
+cursos = respostas %>% 
+    group_by(UF) %>% 
+    summarise(n = n(), 
+              media = mean(media))
+
+criterios = respostas %>% 
+    group_by(UF, categoria) %>% 
+    summarise(media = mean(media))
+
+```
+
+### Levando em consideração as notas atribuidas na categoria de Curso em geral, quais foram as universidades que obtiveram as melhores colocações?
+```{r}
+
+teste = enade_ccc_2017 %>% 
+    group_by(IES,UF) %>% 
+    filter(categoria == "Curso em geral") %>% 
+    summarise(n= mean(n), media= mean(media)) %>% 
+    arrange(desc(media))
+
+teste %>% 
+    head(teste, n=15L) %>% 
+    ggplot(aes(x= reorder(IES,media), y=media, color=UF))+
+    geom_point()+
+    coord_flip()
+
+media_medias =  enade_ccc_2017 %>% 
+    group_by(IES) %>% 
+    summarise(media=mean(media))
+
+enade_ccc_2017 %>% 
+    group_by(IES,UF) %>% 
+    filter(categoria == "Curso em geral") %>% 
+    ggplot(aes(x= reorder(IES,media), y=media, color=UF))+
+    geom_point(color = "grey", alpha = .5)+
+    geom_point(data = media_medias, 
+               color = "red", 
+               size = 2)+
+
+    coord_flip()
+
+    
+```
+
+
+```{r}
+criterios %>%
+    filter(categoria != "Outros") %>%
+    ggplot(aes(
+        x = reorder(UF, media),
+        y = reorder(categoria, media),
+        fill = media
+    )) +
+    geom_tile() + 
+    scale_fill_viridis() + 
+    theme(legend.position = "bottom")
+```
+
+***
+
+Essa é a primeira parte da história. O texto aqui do lado pode ser longo e tal e tal. 
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+### Parte 2
+
+```{r}
+cursos %>% 
+    ggplot(aes(x = UF, y = media)) + 
+    geom_col() + 
+    coord_flip()
+```
+
+*** 
+
+Comentário do Frame 2.
+
+
+### Parte 3
+
+```{r}
+cursos %>% 
+    ggplot(aes(x = UF, y = n)) + 
+    geom_col()
+```
+
+*** 
+
+Mais um comentário

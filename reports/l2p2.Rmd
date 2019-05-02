@@ -50,8 +50,13 @@ topCursos %>%
 
     
 ```
+***
 
+Essa é a primeira parte da história. O texto aqui do lado pode ser longo e tal e tal. 
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+### Parte 2
 ```{r}
 media_medias =  respostas %>% 
     group_by(IES) %>% 
@@ -70,6 +75,7 @@ respostas %>%
 
 ```
 
+### Parte 3
 ```{r}
 iteractive = topCursos%>% 
     ggplot(aes(x = UF, 
@@ -85,49 +91,3 @@ ggplotly(iteractive)
 
 ```
 
-
-
-```{r}
-criterios %>%
-    filter(categoria != "Outros") %>%
-    ggplot(aes(
-        x = reorder(UF, media),
-        y = reorder(categoria, media),
-        fill = media
-    )) +
-    geom_tile() + 
-    scale_fill_viridis() + 
-    theme(legend.position = "bottom")
-```
-
-***
-
-Essa é a primeira parte da história. O texto aqui do lado pode ser longo e tal e tal. 
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-### Parte 2
-
-```{r}
-cursos %>% 
-    ggplot(aes(x = UF, y = media)) + 
-    geom_col() + 
-    coord_flip()
-```
-
-*** 
-
-Comentário do Frame 2.
-
-
-### Parte 3
-
-```{r}
-cursos %>% 
-    ggplot(aes(x = UF, y = n)) + 
-    geom_col()
-```
-
-*** 
-
-Mais um comentário

@@ -25,9 +25,12 @@ criterios = respostas %>%
     group_by(UF, categoria) %>% 
     summarise(media = mean(media))
 
+ufcg_cc = respostas %>% 
+    filter(IES == "UFCG")
+
 ```
 
-### Levando em consideração as notas atribuidas na categoria de Curso em geral, quais foram as universidades que obtiveram as melhores colocações?
+### Levando em consideração as notas atribuidas na categoria de Curso em geral, quais foram as universidades que obtiveram as melhores colocações? {data-commentary-width=400}
 ```{r}
 
 topCursos = respostas %>% 
@@ -50,13 +53,12 @@ topCursos %>%
 
     
 ```
+
 ***
 
-Essa é a primeira parte da história. O texto aqui do lado pode ser longo e tal e tal. 
+Ao considerar-se apenas as notas para a categoria "Curso em geral" e calcular a média dessas notas por IES, obtemos o resultado do Gráfico exibido a cima. Nele podemos perceber que a UNESC, UFAM e FMU lideram o top 3 de universidades melhores avaliadas em relação a seus cursos. Outra informação que o gráfico nos fornece é que as melhores classificações estão no SUL/SUDESTE.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-### Parte 2
+### Um pouco mais sobre as IES melhores classificadas  {data-commentary-width=400}
 ```{r}
 media_medias =  respostas %>% 
     group_by(IES) %>% 
@@ -75,19 +77,36 @@ respostas %>%
 
 ```
 
-### Parte 3
+***
+
+A classificação exibida anteriormente leva em consideração apenas uma varíavel tendenciosa, a média, que pode facilmente ser influenciada por avaliações muito positivas ou muito negativas. Percebe-se um comportamento um pouco diferente neste gráfico. Nele é possivel notar a dispersão das médias para cada IES. De fato a UNESC possui um grande número de avaliações altas, justificando assim sua alta colocação, mas quando olhamos para a UFAM percebemos uma avaliação não tao alta quanto as demais, pesando assim na média da IES. Várias outras IES tiveram algumas avaliações tao altas quanto a UNESC, mas o "espalhamento" das demais avaliações para esta IES afetaram diretamente sua colocação.
+
+### Ok, então o primeiro gráfico reflete realmente quais são as regiões que possuem as IES com melhores avaliações?
 ```{r}
-iteractive = topCursos%>% 
-    ggplot(aes(x = UF, 
-               y = media,
-               color = n,
-               label = IES)) + 
-    geom_point(size = 2, alpha = .5)  + 
-    coord_flip() + 
-    theme(legend.position = "None")
-iteractive
-ggplotly(iteractive)
-
-
+plot_ly(data = topCursos, 
+                x = ~ media, 
+                y = ~ UF,
+                type = "scatter",
+                mode = "markers",
+                color = ~n, 
+                text = ~IES)
 ```
 
+***
+Essa bomba nao fica iterativa
+
+### Comos os alunos formandos da UFCG do curso de Ciência da Computação avaliaram as questões sobre infraestrutura?
+```{r}
+plot_ly(data = ufcg_cc %>% filter(categoria == "Infraestrutura"), 
+             x = ~ media, 
+             y = ~ tema,
+             type = "scatter",
+            mode = "markers",
+            color = ~n, 
+             text = ~enunciado)
+```
+
+***
+Analisando a visualização é possível perceber que os refeitórios, cantina e banheiros não foram bem avaliados, ou seja, segundo os alunos formandos, eles não estão em condições adequadas de uso para atender as suas necessidades. Um fato curioso é que a quantidade de funcionários é bem satisfatória na avaliação, mas se os banheiros não estão em boa condições, então, talvez, falte funcionários para limpá-los. Porém, podemos ver que a quantidade de avaliações que a pergunta sobre a quantidade de funcionários recebeu é menor do que a quantidade de alunos que responderam a questão sobre os refeitórios, cantina e banheiros.
+Além disso, é possível ver que a instituição não promoveu atividades de cultura, lazer e interação social, mas o número de respostas para essa questão é muito menor em comparação com as demais.
+Também, a infraestrutura das salas de aula precisam ser melhorada pela instituição, pois de acordo com os formandos as condições nelas não estão adequadas.

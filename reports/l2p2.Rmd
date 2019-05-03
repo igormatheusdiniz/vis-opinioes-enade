@@ -1,6 +1,6 @@
 ---
 title: "L2P2 - SlideBoard"
-author: Igor Matheus Castor Diniz Pinheiro e Alice 
+author: Igor Matheus Castor Diniz Pinheiro e Alice Fernandes Silva
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
@@ -83,28 +83,35 @@ respostas %>%
 A classificação exibida anteriormente leva em consideração apenas uma varíavel tendenciosa, a média, que pode facilmente ser influenciada por avaliações muito positivas ou muito negativas. Percebe-se um comportamento um pouco diferente neste gráfico. Nele é possivel notar a dispersão das médias para cada IES. De fato a UNESC possui um grande número de avaliações altas, justificando assim sua alta colocação, mas quando olhamos para a UFAM percebemos uma avaliação não tao alta quanto as demais, pesando assim na média da IES. Várias outras IES tiveram algumas avaliações tao altas quanto a UNESC, mas o "espalhamento" das demais avaliações para esta IES afetaram diretamente sua colocação.
 
 ### Ok, então o primeiro gráfico reflete realmente quais são as regiões que possuem as IES com melhores avaliações?
+
 ```{r}
-plot_ly(data = topCursos, 
-                x = ~ media, 
-                y = ~ UF,
-                type = "scatter",
-                mode = "markers",
-                color = ~n, 
-                text = ~IES)
+p = topCursos %>% 
+    ggplot(aes(x = media, 
+               y = UF, 
+               color = IES, 
+               label = n)) + 
+    geom_point(size=3)
+
+ggplotly(p)
 ```
 
 ***
+
 De fato, podemos perceber notas bastante altas para os estados das regiões SUL/SUDESTE, ao selecionarmos os pontos podemos ver de qual universidade especificamente estamos falando.
 
-### Comos os alunos formandos da UFCG do curso de Ciência da Computação avaliaram as questões sobre infraestrutura?
+### Ao analisar-se dentro de um contexto interno do curso de Ciência da Computação na UFCG, comos os alunos formandos avaliaram as questões sobre infraestrutura?
+
 ```{r}
-plot_ly(data = ufcg_cc %>% filter(categoria == "Infraestrutura"), 
-             x = ~ media, 
-             y = ~ tema,
-             type = "scatter",
-            mode = "markers",
-            color = ~n, 
-             text = ~enunciado)
+p = ufcg_cc %>% 
+        filter(categoria == "Infraestrutura") %>%  
+        ggplot(aes(x = media, 
+               y = tema, 
+               color = n, 
+               label = enunciado)) + 
+    geom_col(fill = "gray")
+
+ggplotly(p)
+
 ```
 
 ***

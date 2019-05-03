@@ -1,5 +1,6 @@
 ---
-title: "Uma história em slides"
+title: "L2P2 - SlideBoard"
+author: Igor Matheus Castor Diniz Pinheiro e Alice 
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
@@ -9,7 +10,7 @@ output:
 library(flexdashboard)
 library(tidyverse)
 library(viridis)
-library(htmlwidgets)
+
 library(plotly)
 theme_set(theme_bw())
 
@@ -30,7 +31,7 @@ ufcg_cc = respostas %>%
 
 ```
 
-### Levando em consideração as notas atribuidas na categoria de Curso em geral, quais foram as universidades que obtiveram as melhores colocações? {data-commentary-width=400}
+### Levando em consideração as notas atribuidas na categoria de Curso em geral, quais foram as universidades que obtiveram as melhores colocações?
 ```{r}
 
 topCursos = respostas %>% 
@@ -58,7 +59,7 @@ topCursos %>%
 
 Ao considerar-se apenas as notas para a categoria "Curso em geral" e calcular a média dessas notas por IES, obtemos o resultado do Gráfico exibido a cima. Nele podemos perceber que a UNESC, UFAM e FMU lideram o top 3 de universidades melhores avaliadas em relação a seus cursos. Outra informação que o gráfico nos fornece é que as melhores classificações estão no SUL/SUDESTE.
 
-### Um pouco mais sobre as IES melhores classificadas  {data-commentary-width=400}
+### Um pouco mais sobre as IES melhores classificadas 
 ```{r}
 media_medias =  respostas %>% 
     group_by(IES) %>% 
@@ -93,7 +94,7 @@ plot_ly(data = topCursos,
 ```
 
 ***
-Essa bomba nao fica iterativa
+De fato, podemos perceber notas bastante altas para os estados das regiões SUL/SUDESTE, ao selecionarmos os pontos podemos ver de qual universidade especificamente estamos falando.
 
 ### Comos os alunos formandos da UFCG do curso de Ciência da Computação avaliaram as questões sobre infraestrutura?
 ```{r}
